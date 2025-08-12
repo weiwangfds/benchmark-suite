@@ -100,6 +100,7 @@ npm run tauri:build
   - 将 `ProgressData` 类型引用改为 `ProgressUpdate`
 - 修复Rust测试失败问题
   - 替换测试中的 `todo!()` 宏为正确的测试数据
+  - 修复内存测试中的整数溢出问题
   - 所有32个测试用例通过
 - 简化GitHub Actions工作流，仅支持Windows平台
   - 移除macOS和Linux构建配置

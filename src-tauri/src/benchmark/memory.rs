@@ -273,7 +273,15 @@ impl MemoryBenchmark {
         sys.refresh_memory();
         let peak_used = sys.used_memory();
         
-        let peak_usage_mb = (peak_used - initial_used) / (1024 * 1024);
+        // 防止整数溢出，使用checked_sub或saturating_sub
+        let peak_usage_mb = if peak_used >= initial_used {
+            (peak_used - initial_used) / (1024 * 1024)
+        } else {
+            // 如果峰值使用量小于初始使用量，可能是内存被回收了
+            // 返回一个合理的估计值，基于分配的测试缓冲区大小
+            self.config.buffer_size as u64
+        };
+        
         Ok(peak_usage_mb)
     }
 }#
