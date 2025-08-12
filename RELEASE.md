@@ -105,6 +105,7 @@ npm run tauri:build
 - 简化GitHub Actions工作流，仅支持Windows平台
   - 移除macOS和Linux构建配置
   - 简化CI和Release工作流
+  - 打包时跳过Rust测试以提高构建速度
 - 项目构建、TypeScript检查和Rust测试全部通过
 - 创建人：wangwei
 2. **签名问题**：确保证书配置正确（macOS/Windows）

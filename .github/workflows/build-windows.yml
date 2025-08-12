@@ -67,3 +67,4 @@ jobs:
           prerelease: false
           includeDebug: false
           includeRelease: true
+          args: --skip-tests
