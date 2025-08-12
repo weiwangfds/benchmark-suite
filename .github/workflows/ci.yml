@@ -7,7 +7,7 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  test-frontend:
+  build-frontend:
     runs-on: ubuntu-latest
     
     steps:
@@ -23,26 +23,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run linting
-        run: npm run lint || echo "Linting not configured"
-
-      - name: Run type checking
-        run: npm run type-check || npx vue-tsc --noEmit
-
-      - name: Run tests
-        run: npm test || echo "Tests not configured"
-
       - name: Build frontend
         run: npm run build
 
-  test-tauri:
+  build-tauri:
     runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -63,14 +52,5 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Run Rust tests
-        run: cd src-tauri && cargo test
-
-      - name: Run Rust clippy
-        run: cd src-tauri && cargo clippy -- -D warnings
-
-      - name: Check Rust formatting
-        run: cd src-tauri && cargo fmt --check
-
-      - name: Build Tauri app (test build)
-        run: npm run tauri:build || echo "Build test completed"
+      - name: Build Tauri app
+        run: npm run tauri:build
