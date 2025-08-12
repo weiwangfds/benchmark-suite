@@ -13,71 +13,7 @@ on:
         default: 'v0.1.0'
 
 jobs:
-  create-release:
-    permissions:
-      contents: write
-    runs-on: ubuntu-20.04
-    outputs:
-      release_id: ${{ steps.create-release.outputs.result }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Get version
-        run: echo "PACKAGE_VERSION=$(node -pe "require('./package.json').version")" >> $GITHUB_ENV
-
-      - name: Create release
-        id: create-release
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { data } = await github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: `v${process.env.PACKAGE_VERSION}`,
-              name: `Tauri Benchmark Suite v${process.env.PACKAGE_VERSION}`,
-              body: `## 🚀 Tauri Benchmark Suite Release v${process.env.PACKAGE_VERSION}
-              
-              ### ✨ 新功能
-              - 完整的 Tauri 性能基准测试套件
-              - 系统信息收集和分析功能
-              - IPC 通信性能测试
-              - 实时结果展示和图表分析
-              - 支持多种基准测试场景
-              
-              ### 🔧 技术特性
-              - 基于 Tauri 2.0 构建
-              - Vue 3 + TypeScript 前端
-              - Rust 后端性能优化
-              - 跨平台支持
-              
-              ### 📋 系统要求
-              - Windows 10/11 (x64)
-              
-              ### 📦 安装说明
-              1. 下载对应平台的安装包
-              2. 运行安装程序
-              3. 启动应用开始性能测试
-              
-              ### 🐛 已知问题
-              - 首次启动可能需要较长时间初始化
-              
-              ---
-              
-              **完整更新日志**: https://github.com/${{ github.repository }}/compare/v${process.env.PACKAGE_VERSION}...HEAD`,
-              draft: false,
-              prerelease: false
-            })
-            return data.id
-
   build-tauri:
-    needs: create-release
     permissions:
       contents: write
     strategy:
@@ -92,8 +28,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -120,27 +54,37 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          releaseId: ${{ needs.create-release.outputs.release_id }}
+          tagName: ${{ github.ref_name }}
+          releaseName: 'Tauri Benchmark Suite v${{ github.ref_name }}'
+          releaseBody: |
+            ## 🚀 Tauri Benchmark Suite Release v${{ github.ref_name }}
+            
+            ### ✨ 新功能
+            - 完整的 Tauri 性能基准测试套件
+            - 系统信息收集和分析功能
+            - IPC 通信性能测试
+            - 实时结果展示和图表分析
+            - 支持多种基准测试场景
+            
+            ### 🔧 技术特性
+            - 基于 Tauri 2.0 构建
+            - Vue 3 + TypeScript 前端
+            - Rust 后端性能优化
+            - 跨平台支持
+            
+            ### 📋 系统要求
+            - Windows 10/11 (x64)
+            
+            ### 📦 安装说明
+            1. 下载对应平台的安装包
+            2. 运行安装程序
+            3. 启动应用开始性能测试
+            
+            ---
+            
+            **完整更新日志**: https://github.com/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.sha }}
+          releaseDraft: false
+          prerelease: false
+          includeDebug: false
+          includeRelease: true
           args: ${{ matrix.args }} --skip-tests
-
-  publish-release:
-    permissions:
-      contents: write
-    runs-on: ubuntu-20.04
-    needs: [create-release, build-tauri]
-
-    steps:
-      - name: Publish release
-        id: publish-release
-        uses: actions/github-script@v7
-        env:
-          release_id: ${{ needs.create-release.outputs.release_id }}
-        with:
-          script: |
-            github.rest.repos.updateRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: process.env.release_id,
-              draft: false,
-              prerelease: false
-            })

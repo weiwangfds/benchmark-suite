@@ -106,6 +106,7 @@ npm run tauri:build
   - 移除macOS和Linux构建配置
   - 简化CI和Release工作流，直接进行打包
   - 移除测试、clippy和格式化检查，专注于构建
+  - 修复Release工作流，确保构建的应用正确上传到GitHub Release
   - 打包时跳过Rust测试以提高构建速度
 - 项目构建、TypeScript检查和Rust测试全部通过
 - 创建人：wangwei
