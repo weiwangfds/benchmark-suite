@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { BenchmarkConfig, TestResults, ProgressData } from '../types'
+import type { BenchmarkConfig, TestResults, ProgressUpdate } from '../types'
 
 export const useBenchmarkStore = defineStore('benchmark', () => {
   // 状态
@@ -25,7 +25,7 @@ export const useBenchmarkStore = defineStore('benchmark', () => {
   const currentResults = ref<TestResults | null>(null)
   const testHistory = ref<TestResults[]>([])
   const isTestRunning = ref(false)
-  const testProgress = ref<ProgressData | null>(null)
+  const testProgress = ref<ProgressUpdate | null>(null)
 
   // 动作
   const updateConfig = (newConfig: Partial<BenchmarkConfig>) => {
@@ -41,7 +41,7 @@ export const useBenchmarkStore = defineStore('benchmark', () => {
     isTestRunning.value = running
   }
 
-  const updateProgress = (progress: ProgressData) => {
+  const updateProgress = (progress: ProgressUpdate) => {
     testProgress.value = progress
   }
 

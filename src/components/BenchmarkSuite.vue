@@ -455,7 +455,6 @@ import type { BenchmarkConfig, TestWarningEvent, CpuTestResult, MemoryTestResult
 // 使用基准测试组合式 API
 const {
     systemInfo,
-    currentSession,
     testStatus,
     testResults,
     allSessions,

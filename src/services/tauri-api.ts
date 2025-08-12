@@ -3,7 +3,6 @@ import { listen } from '@tauri-apps/api/event';
 import type {
     BenchmarkConfig,
     SystemInfo,
-    TestResults,
     CpuTestConfig,
     CpuTestResult,
     MemoryTestConfig,

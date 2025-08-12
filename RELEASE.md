@@ -98,6 +98,19 @@ npm run tauri:build
 ### 常见问题
 
 1. **构建失败**：检查依赖是否正确安装
+
+### 变更记录
+
+#### v0.1.1 (2025-08-12)
+- 修复TypeScript编译错误
+  - 移除未使用的 `currentSession` 变量
+  - 移除未使用的 `TestResults` 导入
+  - 将 `ProgressData` 类型引用改为 `ProgressUpdate`
+- 修复Rust测试失败问题
+  - 替换测试中的 `todo!()` 宏为正确的测试数据
+  - 所有32个测试用例通过
+- 项目构建、TypeScript检查和Rust测试全部通过
+- 创建人：wangwei
 2. **签名问题**：确保证书配置正确（macOS/Windows）
 3. **权限错误**：检查 GitHub Token 权限
 
