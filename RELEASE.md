@@ -108,6 +108,11 @@ npm run tauri:build
   - 移除测试、clippy和格式化检查，专注于构建
   - 修复Release工作流，确保构建的应用正确上传到GitHub Release
   - 打包时跳过Rust测试以提高构建速度
+- 新增 Tauri 独立打包工作流（不发布到Release）
+  - 新增 `.github/workflows/tauri-build.yml`
+  - 支持手动触发与 tag 推送触发
+  - 仅构建 Windows 版本并上传为 Workflow 产物
+  - 创建人：wangwei
 - 项目构建、TypeScript检查和Rust测试全部通过
 - 创建人：wangwei
 2. **签名问题**：确保证书配置正确（macOS/Windows）

@@ -1,0 +1,64 @@
+# 创建人：wangwei
+name: Tauri Build (Windows)
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_target:
+        description: "Windows 构建目标 (固定为 x86_64-pc-windows-msvc)"
+        required: false
+        default: "x86_64-pc-windows-msvc"
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: x86_64-pc-windows-msvc
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Build Tauri app (skip tests)
+        id: tauri
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: --target x86_64-pc-windows-msvc --skip-tests
+          includeDebug: false
+          includeRelease: false
+
+      - name: Upload packaged app artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-app-windows
+          path: ${{ steps.tauri.outputs.artifactPaths }}
+          if-no-files-found: error
+          retention-days: 7
+
+
