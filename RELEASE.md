@@ -37,13 +37,7 @@
 - `tauri-benchmark-suite_0.1.0_x64_en-US.msi` - Windows 安装包
 - `tauri-benchmark-suite_0.1.0_x64-setup.exe` - Windows 安装程序
 
-#### macOS
-- `tauri-benchmark-suite_0.1.0_aarch64.dmg` - Apple Silicon 版本
-- `tauri-benchmark-suite_0.1.0_x64.dmg` - Intel 版本
 
-#### Linux
-- `tauri-benchmark-suite_0.1.0_amd64.deb` - Debian/Ubuntu 包
-- `tauri-benchmark-suite_0.1.0_amd64.AppImage` - AppImage 格式
 
 ## 本地构建
 
@@ -53,8 +47,6 @@
 - Rust 1.70+
 - 平台特定依赖：
   - Windows: Visual Studio Build Tools
-  - macOS: Xcode Command Line Tools
-  - Linux: libwebkit2gtk-4.0-dev, libappindicator3-dev 等
 
 ### 构建命令
 
@@ -109,6 +101,9 @@ npm run tauri:build
 - 修复Rust测试失败问题
   - 替换测试中的 `todo!()` 宏为正确的测试数据
   - 所有32个测试用例通过
+- 简化GitHub Actions工作流，仅支持Windows平台
+  - 移除macOS和Linux构建配置
+  - 简化CI和Release工作流
 - 项目构建、TypeScript检查和Rust测试全部通过
 - 创建人：wangwei
 2. **签名问题**：确保证书配置正确（macOS/Windows）
